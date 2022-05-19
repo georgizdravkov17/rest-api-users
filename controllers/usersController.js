@@ -1,4 +1,6 @@
 const User = require("../models/User.js");
+const bcrypt = require("bcryptjs");
+const { registerUserSchema } = require("../validations/userValidation.js");
 
 const getAllUsers = async (req, res) => {
    try{
@@ -33,7 +35,12 @@ const deleteUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try{
-        const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body);
+
+        if(req.body.password){
+            req.body.password = await bcrypt.hash(req.body.password, 10); 
+        }
+
+        const updatedUser = await User.findOneAndUpdate(req.params.id, req.body);
         res.status(200).json({
             message: "Succesfully updated user!",
             user: updatedUser

@@ -47,7 +47,7 @@ const registerUser = async (req, res) => {
 
          res.status(200).json({
              message: "Succesfully created user!",
-             user,
+             user: newUser,
              token
          })
 
@@ -68,7 +68,7 @@ const loginUser = async (req, res) => {
            res.status(500).json({message: "Invalid user data!"});
        }
 
-       const foundUser = await Users.find({ email: email });
+       const foundUser = await User.findOne({ email: email });
 
        if(!foundUser){
            res.status(500).json({message: "Invalid user credentials!"});
@@ -85,7 +85,7 @@ const loginUser = async (req, res) => {
 
     res.json({
         message: "Succesfully login",
-        user,
+        user: foundUser,
         token
     })
        
